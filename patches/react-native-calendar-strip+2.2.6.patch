@@ -1,0 +1,54 @@
+diff --git a/node_modules/react-native-calendar-strip/src/CalendarStrip.js b/node_modules/react-native-calendar-strip/src/CalendarStrip.js
+index 4064262..7f037c1 100644
+--- a/node_modules/react-native-calendar-strip/src/CalendarStrip.js
++++ b/node_modules/react-native-calendar-strip/src/CalendarStrip.js
+@@ -283,6 +283,7 @@ class CalendarStrip extends Component {
+ 
+   // updateWeekView allows external callers to update the visible week.
+   updateWeekView = date => {
++    
+     if (this.props.scrollable) {
+       this.scroller.scrollToDate(date);
+       return;
+@@ -328,7 +329,7 @@ class CalendarStrip extends Component {
+       // Scroll to selected date, centered in the week
+       const scrolledDate = moment(mDate);
+       scrolledDate.subtract(Math.floor(this.props.numDaysInWeek / 2), "days");
+-      this.scroller.scrollToDate(scrolledDate);
++      //this.scroller.scrollToDate(scrolledDate);
+     }
+   }
+ 
+@@ -576,6 +577,7 @@ class CalendarStrip extends Component {
+   render() {
+     // calendarHeader renders above or below of the dates & left/right selectors if dates are shown.
+     // However if dates are hidden, the header shows between the left/right selectors.
++    
+     return (
+       <View
+         style={[
+diff --git a/node_modules/react-native-calendar-strip/src/Scroller.js b/node_modules/react-native-calendar-strip/src/Scroller.js
+index 1bb22b6..a1b1e9f 100644
+--- a/node_modules/react-native-calendar-strip/src/Scroller.js
++++ b/node_modules/react-native-calendar-strip/src/Scroller.js
+@@ -10,7 +10,7 @@ import { View } from "react-native";
+ import PropTypes from "prop-types";
+ import { RecyclerListView, DataProvider, LayoutProvider } from "recyclerlistview";
+ import moment from "moment";
+-
++import { startOfWeek } from "date-fns";
+ export default class CalendarScroller extends Component {
+   static propTypes = {
+     data: PropTypes.array.isRequired,
+@@ -129,7 +129,10 @@ export default class CalendarScroller extends Component {
+ 
+   // Scroll to given date, and check against min and max date if available.
+   scrollToDate = (date) => {
+-    let targetDate = moment(date).subtract(Math.round(this.state.numVisibleItems / 2) - 1, "days");
++    //let targetDate = moment(date).subtract(Math.round(this.state.numVisibleItems / 2) - 1, "days");
++    let targetDate = moment(startOfWeek(moment(date).toDate(), { weekStartsOn: 1 }));
++
++
+     const {
+       minDate,
+       maxDate,
